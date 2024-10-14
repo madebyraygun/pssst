@@ -68,7 +68,7 @@ class Retrieve {
                 header("Location: /message");
                 exit;
         }
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['code']) && isset($token)) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['totp']) && isset($token)) {
             $cfResponse = $_POST['cf-turnstile-response'];
             $ip = $_SERVER['REMOTE_ADDR'];
 

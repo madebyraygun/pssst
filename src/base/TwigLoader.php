@@ -1,6 +1,8 @@
 <?php
 
 namespace madebyraygun\pssst\base;
+
+use madebyraygun\pssst\web\Assets;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
 require '../vendor/autoload.php';
@@ -13,6 +15,10 @@ class TwigLoader {
         $twig = new Environment($loader);
         $twig->addGlobal('cfTsActive', CF_TURNSTILE_ACTIVE);
         $twig->addGlobal('cfTsSiteKey', CF_TURNSTILE_SITEKEY);
+        $twig->addGlobal('logoLight', Assets::logoLightUrl());
+        $twig->addGlobal('logoDark', Assets::logoDarkUrl());
+        $twig->addGlobal('defaultColorScheme', $_ENV['DEFAULT_COLOR_SCHEME'] ?? 'dark');
+        $twig->addGlobal('showGithubLink', $_ENV['SHOW_GITHUB_LINK'] == "true" ? true : false);
         self::$twig = $twig;
     }
 

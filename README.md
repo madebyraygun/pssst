@@ -18,6 +18,14 @@ Generate an OPT key with the following terminal command:
 
 `echo "TOTP_SECRET=\"$(LC_ALL=C tr -dc 'A-Z2-7' </dev/urandom | head -c 32)\"" >> .env`
 
+## Other configuration options
+
+Choose a color theme by setting the `APP_THEME` setting. See https://picocss.com/docs/version-picker for available themes.
+
+Upload a `logo.png` file to the `public\assets\` directory to set a custom logo. Use the filenames `logo-light.png` and `logo-dark.png` to set different logos for light and dark mode.
+
+Disable the Github repo link by setting `SHOW_GITHUB_LINK` to false.
+
 ## Usage
 
 On first run, generate your TOTP authenticator secret at `/generate-totp`. This is a unique secret that is based on your admin email address and the TOTP_SECRET value in your .env file. You will use the dynamically generated 6 digit code to retrieve and delete secrets. Save this URL to your authenticator program.

@@ -23,7 +23,10 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 $router = new Router();
-$router->get('/css', '\madebyraygun\pssst\web\Assets@css');
+$router->get('/system/css', '\madebyraygun\pssst\web\Assets@css');
+$router->get('/system/js', '\madebyraygun\pssst\web\Assets@js');
+$router->get('/system/logo-dark', '\madebyraygun\pssst\web\Assets@logoDark');
+$router->get('/system/logo-light', '\madebyraygun\pssst\web\Assets@logoLight');
 $router->get('/', '\madebyraygun\pssst\controllers\Create@handleGet');
 $router->post('/', '\madebyraygun\pssst\controllers\Create@handlePost');
 $router->get('/created/{token}', '\madebyraygun\pssst\controllers\Created@handleCreated');

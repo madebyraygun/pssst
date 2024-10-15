@@ -1,0 +1,33 @@
+.logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] {
+  .logo-light {
+    display: none;
+  }
+  .logo-dark {
+    display: block;
+  }
+}
+  
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo-container {
+  max-width: 8rem;
+}
+
+header ul.icons {
+  display: flex;
+  list-style-type: none;
+  gap: 1.5rem;
+  li {
+    list-style-type: none;
+  }
+}
+
+

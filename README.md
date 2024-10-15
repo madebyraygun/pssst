@@ -1,6 +1,6 @@
 # Secure Form
 
-A PHP-based single-user application to securely submit and retrieve information on the web. No database required.
+A PHP-based single-user application to securely submit and retrieve information such as passwords via the web. No database required. Keep your secrets out of email and Slack!
 
 ## Installation
 

@@ -22,7 +22,7 @@ class Created {
         $token = htmlspecialchars(trim($token));
         if (!$token || !preg_match('/^[a-f0-9]{32}$/', $token)) {
             echo self::$twig->render('message.twig', [
-                'mesasge' => 'Invalid token.'
+                'message' => 'Invalid token.'
             ]);
             exit;
         } else {
@@ -30,7 +30,7 @@ class Created {
             $filePath = BASE_PATH . '/data/.' . $token;
             if (!file_exists($filePath)) {
                 echo self::$twig->render('message.twig', [
-                    'mesasge' => 'File not found.'
+                    'message' => 'File not found.'
                 ]);
                 exit;
             }

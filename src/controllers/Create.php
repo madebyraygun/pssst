@@ -26,7 +26,7 @@ class Create {
         self::init();
         if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
             echo self::$twig->render('message.twig', [
-                'mesasge' => 'Invalid CSRF token.'
+                'message' => 'Invalid CSRF token.'
             ]);
             exit;
         }
@@ -34,7 +34,7 @@ class Create {
         if (CF_TURNSTILE_ACTIVE && !Challenge::verify($_POST['cf-turnstile-response']))
         {
             echo self::$twig->render('message.twig', [
-                'mesasge' => 'Unable to verify the challenge.'
+                'message' => 'Unable to verify the challenge.'
             ]);
             exit;
         }
@@ -43,7 +43,7 @@ class Create {
         $token = $_POST['token'];
         if (!preg_match('/^[a-f0-9]{32}$/', $token)) {
             echo self::$twig->render('message.twig', [
-                'mesasge' => 'Invalid token'
+                'message' => 'Invalid token'
             ]);
             exit;
         }
@@ -61,7 +61,7 @@ class Create {
             exit;
         } else {
             echo self::$twig->render('message.twig', [
-                'mesasge' => 'Failed to write to file.'
+                'message' => 'Failed to write to file.'
             ]);
         }
     }

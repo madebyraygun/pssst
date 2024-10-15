@@ -36,7 +36,7 @@ class Retrieve {
             $token = htmlspecialchars(trim($token));
             if (!$token || !preg_match('/^[a-f0-9]{32}$/', $token)) {
                 echo self::$twig->render('message.twig', [
-                    'mesasge' => 'Invalid token.'
+                    'message' => 'Invalid token.'
                 ]);
                 exit;
             } else {
@@ -44,7 +44,7 @@ class Retrieve {
                 $filePath = BASE_PATH . '/data/.' . $token;
                 if (!file_exists($filePath)) {
                     echo self::$twig->render('message.twig', [
-                        'mesasge' => 'File not found.'
+                        'message' => 'File not found.'
                     ]);
                     exit;
                 }
@@ -59,7 +59,7 @@ class Retrieve {
             ]);   
         } else {
             echo self::$twig->render('message.twig', [
-                'mesasge' => 'Invalid token.'
+                'message' => 'Invalid token.'
             ]);
             exit;
         }
@@ -69,7 +69,7 @@ class Retrieve {
         self::init();
         if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
             echo self::$twig->render('message.twig', [
-                'mesasge' => 'Invalid CSRF token.'
+                'message' => 'Invalid CSRF token.'
             ]);
             exit;
         }
@@ -80,7 +80,7 @@ class Retrieve {
             if (CF_TURNSTILE_ACTIVE && !Challenge::verify($_POST['cf-turnstile-response']))
             {
                 echo self::$twig->render('message.twig', [
-                    'mesasge' => 'Unable to verify the challenge.'
+                    'message' => 'Unable to verify the challenge.'
                 ]);
                 exit;
             }
@@ -89,7 +89,7 @@ class Retrieve {
             $filePath = BASE_PATH . '/data/.' . $token;
             if (!file_exists($filePath)) {
                 echo self::$twig->render('message.twig', [
-                    'mesasge' => 'File not found.'
+                    'message' => 'File not found.'
                 ]);
                 exit;
             } 
@@ -118,7 +118,6 @@ class Retrieve {
                     'totp' => [
                         'csrfToken' => self::$csrfToken,
                         'label' => 'Delete',
-                        'cfTsSiteKey' => CF_TURNSTILE_SITEKEY
                         'cfTsSiteKey' => CF_TURNSTILE_SITEKEY,
                         'cfTsActive' => CF_TURNSTILE_ACTIVE,
                      ]
@@ -126,7 +125,7 @@ class Retrieve {
             }
         } else {
             echo self::$twig->render('message.twig', [
-                'mesasge' => 'Could not verify your submission.'
+                'message' => 'Could not verify your submission.'
             ]);
         }
     }

@@ -9,7 +9,7 @@ class Message {
         $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');
         $twig = new \Twig\Environment($loader);
         echo $twig->render('message.twig', [
-            'mesasge' => $_SESSION['message']
+            'message' => $_SESSION['message']
         ]);
         unset($_SESSION['message']);
     }

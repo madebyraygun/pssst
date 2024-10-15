@@ -2,7 +2,7 @@
 
 {% block content %}
   {% if message %}
-    <p><mark>{{message}}</mark></p>
+    <p class="message">{{message|raw}}</mark></p>
   {% else %}
     <p>An unknown error occurred. Please try again.</p>
   {% endif %}

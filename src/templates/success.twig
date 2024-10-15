@@ -1,6 +1,12 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-  <p>Success, your secret was saved and will be sent to the Raygun team.</p>
+  <p><strong>Success! Your secret was saved.</p>
+  {% if mailgunActive %}
+    <p>The secret will be sent to {{administrator ?? 'administrator'}}.</p>
+  {% elseif retrieveUrl %}
+    <p>Send the following link to {{administrator ?? 'administrator'}} to retrieve the secret: <a href="{{retrieveUrl}}">{{retrieveUrl}}</a></p>
+  {% endif %}
+
   <p><a role="button" href="/">Go back</a></p>
 {% endblock %}

@@ -11,36 +11,24 @@ use JiriPudil\OTP\TimeBasedOTP;
 use JiriPudil\OTP\Secret;
 
 class Retrieve {
-
-    private static $tsSiteKey;
     private static $csrfToken;
     private static $otpType;
     private static $otp;
     private static $secret;
     private static $account;
-    private static $authenticated;
+    private static $authenticated = false;
     private static $loader;
     private static $twig;
     
 
     public static function init() {
-        self::$tsSiteKey = $_ENV['TURNSTILE_SITEKEY'];
         self::$csrfToken = $_SESSION['csrf_token'];
-        self::$otpType = new TimeBasedOTP();
-        self::$otp = new OTP('rgsecure', self::$otpType);
-        self::$secret = Secret::fromBase32($_ENV['OTP_SECRET']);
-        self::$account = new SimpleAccountDescriptor('dev@madebyraygun.com', self::$secret);
-        self::$authenticated = false;
+        self::$otp = new OTP('madebyraygun/secure-form', new TimeBasedOTP());
+        self::$secret = Secret::fromBase32($_ENV['TOTP_SECRET']);
+        self::$account = new SimpleAccountDescriptor($_ENV['APP_ADMINISTRATOR_EMAIL'], self::$secret);
         $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');
         self::$twig = new \Twig\Environment($loader);
     }
-
-    /* Add this function to the output template to generate an authenticator URL. */
-    // public static function generateOTP() {
-    //     self::init();
-    //     $uri = self::$otp->getProvisioningUri(self::$account, digits: 6);
-    //     echo '<a href="'.$uri. '">Click here to add to your authenticator</a>';
-    // }
 
     public static function handleGet($token) {
         self::init();
@@ -65,7 +53,8 @@ class Retrieve {
                 'totp' => [
                     'csrfToken' => self::$csrfToken,
                     'label' => 'Submit',
-                    'siteKey' => self::$tsSiteKey
+                    'cfTsSiteKey' => CF_TURNSTILE_SITEKEY,
+                    'cfTsActive' => CF_TURNSTILE_ACTIVE,
                 ]
             ]);   
         } else {
@@ -87,8 +76,8 @@ class Retrieve {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['totp']) && isset($token)) {
             $delete = isset($_POST['delete']);
-            $cfTurnstileResponse = $_POST['cf-turnstile-response'];
-            if (!Challenge::verify($cfTurnstileResponse) )
+        
+            if (CF_TURNSTILE_ACTIVE && !Challenge::verify($_POST['cf-turnstile-response']))
             {
                 echo self::$twig->render('message.twig', [
                     'mesasge' => 'Unable to verify the challenge.'
@@ -113,7 +102,8 @@ class Retrieve {
                     'totp' => [
                         'csrfToken' => self::$csrfToken,
                         'label' => 'Submit',
-                        'siteKey' => self::$tsSiteKey
+                        'cfTsSiteKey' => CF_TURNSTILE_SITEKEY,
+                        'cfTsActive' => CF_TURNSTILE_ACTIVE,
                      ]
                 ]);   
                 exit;
@@ -128,7 +118,7 @@ class Retrieve {
                     'totp' => [
                         'csrfToken' => self::$csrfToken,
                         'label' => 'Delete',
-                        'siteKey' => self::$tsSiteKey
+                        'cfTsSiteKey' => CF_TURNSTILE_SITEKEY
                      ]
                 ]);   
             }

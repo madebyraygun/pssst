@@ -9,16 +9,15 @@ use madebyraygun\secureform\services\Challenge;
 class Create {
     private static $basePath;
     private static $maxLength;
-    private static $tsSiteKey;
     private static $csrfToken;
-    private static $loader;
+    private static $administrator;
     private static $twig;
 
     public static function init() {
         self::$basePath = BASE_PATH;
         self::$maxLength = 10000;
-        self::$tsSiteKey = $_ENV['TURNSTILE_SITEKEY'];     
-        self::$csrfToken = $_SESSION['csrf_token']; 
+        self::$csrfToken = $_SESSION['csrf_token'];
+        self::$administrator = APP_ADMINISTRATOR_NAME;
         $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');
         self::$twig = new \Twig\Environment($loader);
     }
@@ -31,8 +30,8 @@ class Create {
             ]);
             exit;
         }
-        $cfTurnstileResponse = $_POST['cf-turnstile-response'];
-        if (!Challenge::verify($cfTurnstileResponse) )
+       
+        if (CF_TURNSTILE_ACTIVE && !Challenge::verify($_POST['cf-turnstile-response']))
         {
             echo self::$twig->render('message.twig', [
                 'mesasge' => 'Unable to verify the challenge.'
@@ -58,8 +57,7 @@ class Create {
         $filePath = self::$basePath . '/data/.' . $token;
 
         if (file_put_contents($filePath, $query) !== false) {
-            $_SESSION['token'] = $token;
-            header("Location: success");
+            header("Location: created/" . $token);
             exit;
         } else {
             echo self::$twig->render('message.twig', [
@@ -72,13 +70,14 @@ class Create {
         self::init();
         $token = bin2hex(random_bytes(16));
         $_SESSION['token'] = $token;
-        $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');
-        $twig = new \Twig\Environment($loader);
-        echo $twig->render('index.twig', [
+        
+        echo self::$twig->render('index.twig', [
             'token' => $token,
-            'siteKey' => self::$tsSiteKey,
+            'cfTsSiteKey' => CF_TURNSTILE_SITEKEY,
+            'cfTsActive' => CF_TURNSTILE_ACTIVE,
             'csrfToken' => self::$csrfToken,
-            'maxLength' => self::$maxLength
+            'maxLength' => self::$maxLength,
+            'administrator' => self::$administrator
         ]);   
     }
 }

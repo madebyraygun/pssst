@@ -1,7 +1,14 @@
 {% extends 'base.twig' %}
 
+{% block head %}
+  {{ parent() }}
+  {% if cfTsActive|default %}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
-  <p>Use this secure form to send passwords and other sensitive information to the Raygun team. Any information shared via this form will be stored securely and deleted within 24 hours.</p>
+  <p>Use this secure form to send passwords and other sensitive information to {{administrator ?? 'administrator'}}. Any information shared via this form will be stored securely and deleted after viewing.</p>
     <form action="/" method="post">
         <label for="query">Message</label>
         <textarea id="query" name="query" rows="4" cols="50" maxlength="{{maxLength}}"></textarea>
@@ -15,7 +22,9 @@
         </script>
         <input type="hidden" name="token" value="{{token}}">
         <input type="hidden" name="csrf_token" value="{{csrfToken}}">
-        <div class="cf-turnstile" data-sitekey="{{siteKey}}" data-theme="light"></div>
+        {% if cfTsActive|default %}
+            <div class="cf-turnstile" data-sitekey="{{cfTsSiteKey}}" data-theme="light"></div>
+        {% endif %}
         <br>
         <input type="submit" value="Submit">
     </form>

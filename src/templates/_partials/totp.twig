@@ -6,6 +6,8 @@
   {% if label == 'Delete' %}
     <input type="hidden" name="delete" value="true">
   {% endif %}
-  <div class="cf-turnstile" data-sitekey="{{siteKey}}" data-theme="light"></div>
+  {% if cfTsActive %}
+    <div class="cf-turnstile" data-sitekey="{{cfTsSiteKey}}" data-theme="light"></div>
+  {% endif %}
   <input type="submit" value="{{label}}">
 </form>

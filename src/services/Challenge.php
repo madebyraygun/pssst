@@ -6,15 +6,15 @@ require '../vendor/autoload.php';
 
 class Challenge {
   public static function verify($cfResponse) : bool {
-    if ('APP_ENV' === 'dev') {
-      return true;
+    if ('APP_ENV' === 'dev' || 'CF_TURNSTILE_ACTIVE' === false) {
+      return true;  
     }
     
     if (!$cfResponse) {
       return false;
     }
 
-    $tsSecretKey = $_ENV['TURNSTILE_SECRET'];
+    $tsSecretKey = $_ENV['CF_TURNSTILE_SECRET'];
     $ip = $_SERVER['REMOTE_ADDR'];
 
     // Prepare data for the API call

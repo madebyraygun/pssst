@@ -4,6 +4,7 @@ namespace madebyraygun\pssst\controllers;
 
 require '../vendor/autoload.php';
 
+use madebyraygun\pssst\base\TwigLoader;
 use JiriPudil\OTP\Account\SimpleAccountDescriptor;
 use JiriPudil\OTP\OTP;
 use JiriPudil\OTP\TimeBasedOTP;
@@ -21,8 +22,7 @@ class GenerateTotp {
         self::$otp = new OTP('madebyraygun/pssst', new TimeBasedOTP());
         self::$secret = Secret::fromBase32($_ENV['TOTP_SECRET']);
         self::$account = new SimpleAccountDescriptor($_ENV['APP_ADMINISTRATOR_EMAIL'], self::$secret);
-        $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');
-        self::$twig = new \Twig\Environment($loader);
+        self::$twig = TwigLoader::getTwig();
     }
 
     /*

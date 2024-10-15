@@ -1,12 +1,5 @@
 {% extends 'base.twig' %}
 
-{% block head %}
-  {{ parent() }}
-  {% if cfTsActive|default %}
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-  {% endif %}
-{% endblock %}
-
 {% block content %}
   <p>Use this secure form to send passwords and other sensitive information to {{administrator ?? 'administrator'}}. Any information shared via this form will be stored securely and deleted after viewing.</p>
     <form action="/" method="post">
@@ -22,7 +15,7 @@
         </script>
         <input type="hidden" name="token" value="{{token}}">
         <input type="hidden" name="csrf_token" value="{{csrfToken}}">
-        {% if cfTsActive|default %}
+        {% if cfTsActive %}
             <div class="cf-turnstile" data-sitekey="{{cfTsSiteKey}}" data-theme="light"></div>
         {% endif %}
         <br>

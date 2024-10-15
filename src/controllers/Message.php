@@ -4,10 +4,11 @@ namespace madebyraygun\pssst\controllers;
 
 require '../vendor/autoload.php';
 
+use madebyraygun\pssst\base\TwigLoader;
+
 class Message {
     public static function handleMessage() {
-        $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');
-        $twig = new \Twig\Environment($loader);
+        $twig = TwigLoader::getTwig();
         echo $twig->render('message.twig', [
             'message' => $_SESSION['message']
         ]);

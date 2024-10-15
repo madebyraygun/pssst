@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{appTitle|default('Secure Form')}}</title>
   <link rel="stylesheet" href="/css/pico.classless.violet.min.css">
+  {% if cfTsActive %}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+  {% endif %}
   <meta name="robots" content="noindex, nofollow">
 {% endblock %}
 </head>

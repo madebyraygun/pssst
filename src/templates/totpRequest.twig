@@ -1,12 +1,5 @@
 {% extends 'base.twig' %}
 
-{% block head %}
-  {{ parent() }}
-  {% if totp.cfTsActive|default %}
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-  {% endif %}
-{% endblock %}
-
 {% block content %}
   {% if message %}
     <p><mark>{{message}}</mark></p>

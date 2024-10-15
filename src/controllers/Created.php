@@ -3,7 +3,9 @@
 namespace madebyraygun\pssst\controllers;
 
 require '../vendor/autoload.php';
+
 use Mailgun\Mailgun;
+use madebyraygun\pssst\base\TwigLoader;
 
 class Created {
 
@@ -14,8 +16,7 @@ class Created {
 
     public static function init() {
         self::$administrator = APP_ADMINISTRATOR_NAME; 
-        $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');
-        self::$twig = new \Twig\Environment($loader);
+        self::$twig = TwigLoader::getTwig();
     }
     public static function handleCreated($token) {
         self::init();

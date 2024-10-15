@@ -5,6 +5,7 @@ namespace madebyraygun\pssst\controllers;
 require '../vendor/autoload.php';
 
 use madebyraygun\pssst\services\Challenge;
+use madebyraygun\pssst\base\TwigLoader;
 
 class Create {
     private static $basePath;
@@ -18,8 +19,7 @@ class Create {
         self::$maxLength = 10000;
         self::$csrfToken = $_SESSION['csrf_token'];
         self::$administrator = APP_ADMINISTRATOR_NAME;
-        $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');
-        self::$twig = new \Twig\Environment($loader);
+        self::$twig = TwigLoader::getTwig();
     }
 
     public static function handlePost() {
@@ -73,8 +73,6 @@ class Create {
         
         echo self::$twig->render('index.twig', [
             'token' => $token,
-            'cfTsSiteKey' => CF_TURNSTILE_SITEKEY,
-            'cfTsActive' => CF_TURNSTILE_ACTIVE,
             'csrfToken' => self::$csrfToken,
             'maxLength' => self::$maxLength,
             'administrator' => self::$administrator

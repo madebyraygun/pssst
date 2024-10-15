@@ -1,0 +1,22 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+  <p>Use this secure form to send passwords and other sensitive information to the Raygun team. Any information shared via this form will be stored securely and deleted within 24 hours.</p>
+    <form action="/" method="post">
+        <label for="query">Message</label>
+        <textarea id="query" name="query" rows="4" cols="50" maxlength="{{maxLength}}"></textarea>
+        <small id="counter">0/{{maxLength}}</small>
+        <script>
+            const query = document.getElementById("query");
+            const counter = document.getElementById("counter");
+            query.addEventListener("input", () => {
+                counter.textContent = `${query.value.length}/{{maxLength}}`;
+            });
+        </script>
+        <input type="hidden" name="token" value="{{token}}">
+        <input type="hidden" name="csrf_token" value="{{csrfToken}}">
+        <div class="cf-turnstile" data-sitekey="{{siteKey}}" data-theme="light"></div>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

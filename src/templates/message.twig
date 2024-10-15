@@ -1,0 +1,11 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+  {% if message %}
+    <p><mark>{{message}}</mark></p>
+  {% else %}
+    <p>An unknown error occurred. Please try again.</p>
+  {% endif %}
+  <p><a role="button" href="/">Go back</a></p>
+{% endblock %}
+

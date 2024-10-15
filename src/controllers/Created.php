@@ -1,6 +1,6 @@
 <?php
 
-namespace madebyraygun\secureform\controllers;
+namespace madebyraygun\pssst\controllers;
 
 require '../vendor/autoload.php';
 use Mailgun\Mailgun;

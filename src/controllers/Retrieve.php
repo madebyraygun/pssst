@@ -1,10 +1,10 @@
 <?php
 
-namespace madebyraygun\secureform\controllers;
+namespace madebyraygun\pssst\controllers;
 
 require '../vendor/autoload.php';
 
-use madebyraygun\secureform\services\Challenge;
+use madebyraygun\pssst\services\Challenge;
 use JiriPudil\OTP\Account\SimpleAccountDescriptor;
 use JiriPudil\OTP\OTP;
 use JiriPudil\OTP\TimeBasedOTP;
@@ -23,7 +23,7 @@ class Retrieve {
 
     public static function init() {
         self::$csrfToken = $_SESSION['csrf_token'];
-        self::$otp = new OTP('madebyraygun/secure-form', new TimeBasedOTP());
+        self::$otp = new OTP('madebyraygun/pssst', new TimeBasedOTP());
         self::$secret = Secret::fromBase32($_ENV['TOTP_SECRET']);
         self::$account = new SimpleAccountDescriptor($_ENV['APP_ADMINISTRATOR_EMAIL'], self::$secret);
         $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');

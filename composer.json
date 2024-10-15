@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-        "madebyraygun\\secureform\\": "src"
+        "madebyraygun\\pssst\\": "src"
         }
     }
 }

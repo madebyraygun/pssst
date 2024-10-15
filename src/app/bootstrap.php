@@ -22,7 +22,7 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 $router = new Router();
-$router->setNamespace('madebyraygun\secureform\controllers');
+$router->setNamespace('madebyraygun\pssst\controllers');
 $router->get('/', 'Create@handleGet');
 $router->post('/', 'Create@handlePost');
 $router->get('/created/{token}', 'Created@handleCreated');

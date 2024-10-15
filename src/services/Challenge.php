@@ -1,6 +1,6 @@
 <?php 
 
-namespace madebyraygun\secureform\services;
+namespace madebyraygun\pssst\services;
 
 require '../vendor/autoload.php';
 

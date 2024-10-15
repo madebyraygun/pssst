@@ -1,6 +1,6 @@
 <?php
 
-namespace madebyraygun\secureform\controllers;
+namespace madebyraygun\pssst\controllers;
 
 require '../vendor/autoload.php';
 
@@ -18,7 +18,7 @@ class GenerateTotp {
     
 
     public static function init() {
-        self::$otp = new OTP('madebyraygun/secure-form', new TimeBasedOTP());
+        self::$otp = new OTP('madebyraygun/pssst', new TimeBasedOTP());
         self::$secret = Secret::fromBase32($_ENV['TOTP_SECRET']);
         self::$account = new SimpleAccountDescriptor($_ENV['APP_ADMINISTRATOR_EMAIL'], self::$secret);
         $loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/src/templates');

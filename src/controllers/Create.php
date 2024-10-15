@@ -1,10 +1,10 @@
 <?php
 
-namespace madebyraygun\secureform\controllers;
+namespace madebyraygun\pssst\controllers;
 
 require '../vendor/autoload.php';
 
-use madebyraygun\secureform\services\Challenge;
+use madebyraygun\pssst\services\Challenge;
 
 class Create {
     private static $basePath;

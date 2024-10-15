@@ -119,6 +119,8 @@ class Retrieve {
                         'csrfToken' => self::$csrfToken,
                         'label' => 'Delete',
                         'cfTsSiteKey' => CF_TURNSTILE_SITEKEY
+                        'cfTsSiteKey' => CF_TURNSTILE_SITEKEY,
+                        'cfTsActive' => CF_TURNSTILE_ACTIVE,
                      ]
                 ]);   
             }

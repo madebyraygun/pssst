@@ -6,7 +6,8 @@
         "nyholm/psr7": "^1.8",
         "jiripudil/otp": "^1.0",
         "bramus/router": "^1.6",
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.0",
+        "picocss/pico": "^2.0"
     },
     "config": {
         "allow-plugins": {

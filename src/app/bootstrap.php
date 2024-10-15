@@ -8,6 +8,7 @@ use Bramus\Router\Router;
 $dotenv = Dotenv::createImmutable(paths: BASE_PATH);
 $dotenv->load();
 
+define('VENDOR_PATH', BASE_PATH . '/vendor');
 define('APP_ENV', $_ENV['APP_ENV'] ?? 'production');
 define('APP_ADMINISTRATOR_NAME', $_ENV['APP_ADMINISTRATOR_NAME'] ?? 'the administrator');
 define('APP_BASE_URL', $_ENV['APP_BASE_URL'] ?? 'http://localhost:3000');
@@ -22,11 +23,11 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 $router = new Router();
-$router->setNamespace('madebyraygun\pssst\controllers');
-$router->get('/', 'Create@handleGet');
-$router->post('/', 'Create@handlePost');
-$router->get('/created/{token}', 'Created@handleCreated');
-$router->get('/generate-totp', 'GenerateTotp@generate');
-$router->get('/retrieve/{token}', 'Retrieve@handleGet');
-$router->post('/retrieve/{token}', 'Retrieve@handlePost');
+$router->get('/css', '\madebyraygun\pssst\web\Assets@css');
+$router->get('/', '\madebyraygun\pssst\controllers\Create@handleGet');
+$router->post('/', '\madebyraygun\pssst\controllers\Create@handlePost');
+$router->get('/created/{token}', '\madebyraygun\pssst\controllers\Created@handleCreated');
+$router->get('/generate-totp', '\madebyraygun\pssst\controllers\GenerateTotp@generate');
+$router->get('/retrieve/{token}', '\madebyraygun\pssst\controllers\Retrieve@handleGet');
+$router->post('/retrieve/{token}', '\madebyraygun\pssst\controllers\Retrieve@handlePost');
 $router->run();

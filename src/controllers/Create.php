@@ -11,12 +11,10 @@ use madebyraygun\pssst\services\Challenge;
 
 class Create {
     private static $sessionCsrfToken;
-    private static $basePath;
     private static $maxLength;
     private static $twig;
 
     public static function init() {
-        self::$basePath = BASE_PATH;
         self::$maxLength = 10000;
         self::$sessionCsrfToken = $_SESSION['csrf_token'];
         self::$twig = TwigLoader::getTwig();
@@ -58,7 +56,12 @@ class Create {
         $encryptedMessage = openssl_encrypt($message, 'aes-256-cbc', $key, 0, $iv);
         
         // Define the file path
-        $filePath = self::$basePath . '/data/' . $uuid . '.json';
+        $filePath = BASE_PATH . '/data/' . $uuid . '.json';
+        
+        /* 
+         * @todo - implement this as a model
+         */
+
         $fileContents = json_encode([
             'created' => time(),
             'expires' => false, //@todo

@@ -18,7 +18,7 @@ class TwigLoader {
         $twig->addGlobal('cfTsSiteKey', CF_TURNSTILE_SITEKEY);
         $twig->addGlobal('logoLight', Assets::logoLightUrl());
         $twig->addGlobal('logoDark', Assets::logoDarkUrl());
-        $twig->addGlobal('defaultColorScheme', $_ENV['DEFAULT_COLOR_SCHEME'] ?? 'dark');
+        $twig->addGlobal('defaultColorScheme', $_ENV['APP_DEFAULT_COLOR_SCHEME'] ?? 'dark');
         $twig->addGlobal('showGithubLink', $_ENV['SHOW_GITHUB_LINK'] == "true" ? true : false);
         $twig->addGlobal('csrfToken', $_SESSION['csrf_token']);
         $twig->addGlobal('appAdministrator', APP_ADMINISTRATOR_NAME);

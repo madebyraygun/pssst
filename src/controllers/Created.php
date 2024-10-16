@@ -19,17 +19,19 @@ class Created {
         self::$administrator = APP_ADMINISTRATOR_NAME; 
         self::$twig = TwigLoader::getTwig();
     }
-    public static function handleCreated($uuid) {
+    public static function handleCreated($uuid, $key) {
         self::init();
         $uuid = htmlspecialchars(trim($uuid));
-        if (!Uuid::validate($uuid)) {
+        $key = htmlspecialchars(trim($key));
+        $key = preg_match('/^[a-f0-9]{16}$/', $key)  == 1 ? $key : null;
+        if (!Uuid::validate($uuid) || !$key) {
             echo self::$twig->render('message.twig', [
-                'message' => 'Invalid ID.'
+                'message' => 'Invalid ID or key.'
             ]);
             exit;
         } else {
             // Verify the data file exists
-            $filePath = BASE_PATH . '/data/.' . $uuid;
+            $filePath = BASE_PATH . '/data/' . $uuid . '.json';
             if (!file_exists($filePath)) {
                 echo self::$twig->render('message.twig', [
                     'message' => 'Secret not found.'
@@ -38,7 +40,7 @@ class Created {
             }
         }
 
-        self::$retrieveUrl = APP_BASE_URL . '/retrieve/' . $uuid;
+        self::$retrieveUrl = APP_BASE_URL . '/retrieve/' . $uuid . '/' . $key;
 
         //Send the email
         if (APP_ENV !== 'dev' || MAILGUN_ACTIVE) {

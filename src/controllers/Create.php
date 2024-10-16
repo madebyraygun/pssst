@@ -49,15 +49,27 @@ class Create {
         }
 
         // Sanitize the input
-        $query = trim($_POST['query']); // Trim whitespace
-        $query = htmlspecialchars($query, ENT_QUOTES, 'UTF-8'); // Convert special characters to HTML entities
-        $query = substr($query, 0, self::$maxLength); 
-
+        $message = trim($_POST['message']);
+        $message = substr($message, 0, self::$maxLength); 
+        
+        // Encrypt the message
+        $key = bin2hex(random_bytes(8));
+        $iv = random_bytes(16); //
+        $encryptedMessage = openssl_encrypt($message, 'aes-256-cbc', $key, 0, $iv);
+        
         // Define the file path
-        $filePath = self::$basePath . '/data/.' . $uuid;
-
-        if (file_put_contents($filePath, $query) !== false) {
-            header("Location: created/" . $uuid);
+        $filePath = self::$basePath . '/data/' . $uuid . '.json';
+        $fileContents = json_encode([
+            'created' => time(),
+            'expires' => false, //@todo
+            'viewed' => false,
+            'deleteAfterView' => false,// @todo
+            'isPasswordProtected' => false,// @todo
+            'iv' => bin2hex($iv),
+            'message' => $encryptedMessage
+        ]);
+        if (file_put_contents($filePath, $fileContents ) !== false) {
+            header("Location: created/" . $uuid . "/" . $key);
             exit;
         } else {
             echo self::$twig->render('message.twig', [
@@ -68,10 +80,8 @@ class Create {
 
     public static function handleGet() {
         self::init();
-        /* use as encrypt key? */
-        // $uuid = bin2hex(random_bytes(16));
+        
         $uuid = Uuid::uuid4();
-        $_SESSION['uuid'] = $uuid;
         
         echo self::$twig->render('index.twig', [
             'uuid' => $uuid,

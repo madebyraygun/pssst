@@ -3,14 +3,14 @@
 {% block content %}
   <p>Use this secure form to send passwords and other sensitive information to {{appAdministrator ?? 'the administrator'}}. Any information shared via this form will be stored securely and deleted after viewing.</p>
     <form action="/" method="post">
-        <label for="query">Message</label>
-        <textarea id="query" name="query" rows="4" cols="50" maxlength="{{maxLength}}"></textarea>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" cols="50" maxlength="{{maxLength}}"></textarea>
         <small id="counter">0/{{maxLength}}</small>
         <script>
-            const query = document.getElementById("query");
+            const message = document.getElementById("message");
             const counter = document.getElementById("counter");
-            query.addEventListener("input", () => {
-                counter.textContent = `${query.value.length}/{{maxLength}}`;
+            message.addEventListener("input", () => {
+                counter.textContent = `${message.value.length}/{{maxLength}}`;
             });
         </script>
         <input type="hidden" name="uuid" value="{{uuid}}">

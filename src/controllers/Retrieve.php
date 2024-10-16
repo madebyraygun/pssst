@@ -30,18 +30,20 @@ class Retrieve {
         self::$twig = TwigLoader::getTwig();
     }
 
-    public static function handleGet($uuid) {
+    public static function handleGet($uuid, $key) {
         self::init();
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($uuid)) {
             $uuid = htmlspecialchars(trim($uuid));
-            if (!Uuid::validate($uuid)) {
+            $key = htmlspecialchars(trim($key));
+            $key = preg_match('/^[a-f0-9]{16}$/', $key)  == 1 ? $key : null;
+            if (!Uuid::validate($uuid) || !$key) {
                 echo self::$twig->render('message.twig', [
-                    'message' => 'Invalid ID.'
+                    'message' => 'Invalid ID or key.'
                 ]);
                 exit;
             } else {
                 // Verify the data file exists
-                $filePath = BASE_PATH . '/data/.' . $uuid;
+                $filePath = BASE_PATH . '/data/' . $uuid . '.json';
                 if (!file_exists($filePath)) {
                     echo self::$twig->render('message.twig', [
                         'message' => 'Secret not found.'
@@ -62,7 +64,7 @@ class Retrieve {
         }
     } 
 
-    public static function handlePost($uuid) {
+    public static function handlePost($uuid, $key) {
         self::init();
         if (!hash_equals(self::$sessionCsrfToken, $_POST['csrf_token'])) {
             echo self::$twig->render('message.twig', [
@@ -83,10 +85,10 @@ class Retrieve {
             }
 
             // Verify the data file exists
-            $filePath = BASE_PATH . '/data/.' . $uuid;
+            $filePath = BASE_PATH . '/data/' . $uuid . '.json';
             if (!file_exists($filePath)) {
                 echo self::$twig->render('message.twig', [
-                    'message' => 'Invalid ID.'
+                    'message' => 'Secret not found.'
                 ]);
                 exit;
             } 
@@ -112,11 +114,24 @@ class Retrieve {
             }
             if ( $delete ) {
                 unlink($filePath);
-                echo self::$twig->render('deleted.twig');
-            } else {        
+                echo self::$twig->render('message.twig', [
+                    'message' => 'Secret deleted.'
+                ]);
+            } else {     
+                $fileContents = file_get_contents($filePath);
+                $data = json_decode($fileContents, true);
+                if (!$data['viewed']) {
+                    $data['viewed'] = true;
+                    file_put_contents($filePath, json_encode($data));
+                }
+               
+                $iv = hex2bin($data['iv']);
+                $encryptedMessage = $encryptedMessage = $data['message'];
+                $decryptedMessage = openssl_decrypt($encryptedMessage, 'aes-256-cbc', $key, 0, $iv);
+                
                 echo self::$twig->render('displaySecret.twig', [
                     'uuid' => $uuid,
-                    'fileContents' => file_get_contents($filePath),
+                    'secretContents' => $decryptedMessage,
                     'totp' => [
                         'label' => 'Delete',
                      ]

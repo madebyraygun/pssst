@@ -20,7 +20,7 @@ class GenerateTotp {
 
     public static function init() {
         self::$otp = new OTP('madebyraygun/pssst', new TimeBasedOTP());
-        self::$secret = Secret::fromBase32($_ENV['TOTP_SECRET']);
+        self::$secret = Secret::fromBase32($_ENV['APP_TOTP_SECRET']);
         self::$account = new SimpleAccountDescriptor($_ENV['APP_ADMINISTRATOR_EMAIL'], self::$secret);
         self::$twig = TwigLoader::getTwig();
     }
@@ -34,6 +34,13 @@ class GenerateTotp {
         if (APP_ENV !== 'dev') {
             echo self::$twig->render('message.twig', [
                 'message' => 'This feature is only available in dev mode.'
+            ]);
+            exit;
+        }
+
+        if (!TOTP_ACTIVE) {
+            echo self::$twig->render('message.twig', [
+                'message' => 'TOTP is not active.'
             ]);
             exit;
         }

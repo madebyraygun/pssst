@@ -14,7 +14,9 @@ From the terminal:
 
 Edit the .env file to update the app settings. Include your Cloudflare Turnstile site key and Mailgun credentials (recommended but optional).
 
-Generate an OPT key with the following terminal command:
+### Optional
+
+If you want to use a time-based OTP to protect your secrets, set `TOTP_ACTIVE` to "true" and generate an OPT key with the following terminal command:
 
 `echo "TOTP_SECRET=\"$(LC_ALL=C tr -dc 'A-Z2-7' </dev/urandom | head -c 32)\"" >> .env`
 

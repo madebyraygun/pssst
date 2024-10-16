@@ -14,6 +14,7 @@ class TwigLoader {
         $loader = new FilesystemLoader(BASE_PATH . '/src/templates');
         $twig = new Environment($loader);
         $twig->addGlobal('cfTsActive', CF_TURNSTILE_ACTIVE);
+        $twig->addGlobal('totpActive', TOTP_ACTIVE);
         $twig->addGlobal('cfTsSiteKey', CF_TURNSTILE_SITEKEY);
         $twig->addGlobal('logoLight', Assets::logoLightUrl());
         $twig->addGlobal('logoDark', Assets::logoDarkUrl());

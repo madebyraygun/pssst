@@ -25,7 +25,7 @@ class Retrieve {
     public static function init() {
         self::$sessionCsrfToken = $_SESSION['csrf_token'];
         self::$otp = new OTP('madebyraygun/pssst', new TimeBasedOTP());
-        self::$secret = Secret::fromBase32($_ENV['TOTP_SECRET']);
+        self::$secret = Secret::fromBase32($_ENV['APP_TOTP_SECRET']);
         self::$account = new SimpleAccountDescriptor($_ENV['APP_ADMINISTRATOR_EMAIL'], self::$secret);
         self::$twig = TwigLoader::getTwig();
     }
@@ -51,7 +51,7 @@ class Retrieve {
             }
             echo self::$twig->render('totpRequest.twig', [
                 'totp' => [
-                    'label' => 'Submit',
+                    'label' => 'View Secret',
                 ]
             ]);   
         } else {
@@ -71,7 +71,7 @@ class Retrieve {
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['totp']) && isset($uuid)) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($uuid)) {
             $delete = isset($_POST['delete']);
         
             if (CF_TURNSTILE_ACTIVE && !Challenge::verify($_POST['cf-turnstile-response']))
@@ -91,16 +91,24 @@ class Retrieve {
                 exit;
             } 
 
-            $totp = htmlspecialchars(trim($_POST['totp']));
-            $authenticated = self::$otp->verify(self::$account, $totp);
-            if (!$authenticated) {
-                echo self::$twig->render('totpRequest.twig', [
-                    'message'   => 'Invalid TOTP code',
-                    'totp' => [
-                        'label' => 'Submit',
-                     ]
-                ]);   
-                exit;
+            if (TOTP_ACTIVE) {
+                if (!isset($_POST['totp'])) {
+                    echo self::$twig->render('message.twig', [
+                        'message' => 'Invalid TOTP code.'
+                    ]);
+                    exit;
+                }
+                $totp = htmlspecialchars(trim($_POST['totp']));
+                $authenticated = self::$otp->verify(self::$account, $totp);
+                if (!$authenticated) {
+                    echo self::$twig->render('totpRequest.twig', [
+                        'message'   => 'Invalid TOTP code',
+                        'totp' => [
+                            'label' => 'Submit',
+                        ]
+                    ]);   
+                    exit;
+                }
             }
             if ( $delete ) {
                 unlink($filePath);

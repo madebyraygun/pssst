@@ -13,6 +13,7 @@ define('APP_ENV', $_ENV['APP_ENV'] ?? 'production');
 define('APP_ADMINISTRATOR_NAME', $_ENV['APP_ADMINISTRATOR_NAME'] ?? 'the administrator');
 define('APP_BASE_URL', $_ENV['APP_BASE_URL'] ?? 'http://localhost:3000');
 define('MAILGUN_ACTIVE', $_ENV['MAILGUN_ACTIVE'] == "true" ? true : false);
+define('TOTP_ACTIVE', $_ENV['TOTP_ACTIVE'] == "true" ? true : false);
 define('CF_TURNSTILE_ACTIVE', $_ENV['CF_TURNSTILE_ACTIVE'] == "true" ? true : false);
 define('CF_TURNSTILE_SITEKEY', $_ENV['CF_TURNSTILE_SITEKEY'] ?? '');
 

@@ -1,7 +1,7 @@
 <form action="" method="post">
   <label for="totp">Enter your OTP code:</label>
   <input type="text" required id="totp" name="totp" autocomplete="one-time-code" maxlength="6">
-  <input type="hidden" name="token" value="{{token}}">
+  <input type="hidden" name="uid" value="{{uid}}">
   <input type="hidden" name="csrf_token" value="{{csrfToken}}">
   {% if label == 'Delete' %}
     <input type="hidden" name="delete" value="true">

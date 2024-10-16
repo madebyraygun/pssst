@@ -37,11 +37,11 @@ class Create {
             exit;
         }
 
-        // Validate the token
-        $token = $_POST['token'];
-        if (!preg_match('/^[a-f0-9]{32}$/', $token)) {
+        // Validate the uid
+        $uid = $_POST['uid'];
+        if (!preg_match('/^[a-f0-9]{13}$/', $uid)) {
             echo self::$twig->render('message.twig', [
-                'message' => 'Invalid token'
+                'message' => 'Invalid UID.'
             ]);
             exit;
         }
@@ -52,10 +52,10 @@ class Create {
         $query = substr($query, 0, self::$maxLength); 
 
         // Define the file path
-        $filePath = self::$basePath . '/data/.' . $token;
+        $filePath = self::$basePath . '/data/.' . $uid;
 
         if (file_put_contents($filePath, $query) !== false) {
-            header("Location: created/" . $token);
+            header("Location: created/" . $uid);
             exit;
         } else {
             echo self::$twig->render('message.twig', [
@@ -66,11 +66,13 @@ class Create {
 
     public static function handleGet() {
         self::init();
-        $token = bin2hex(random_bytes(16));
-        $_SESSION['token'] = $token;
+        /* use as encrypt key? */
+        // $uid = bin2hex(random_bytes(16));
+        $uid = uniqid();
+        $_SESSION['uid'] = $uid;
         
         echo self::$twig->render('index.twig', [
-            'token' => $token,
+            'uid' => $uid,
             'maxLength' => self::$maxLength,
         ]);   
     }

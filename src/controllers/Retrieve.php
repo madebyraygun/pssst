@@ -29,21 +29,21 @@ class Retrieve {
         self::$twig = TwigLoader::getTwig();
     }
 
-    public static function handleGet($token) {
+    public static function handleGet($uid) {
         self::init();
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($token)) {
-            $token = htmlspecialchars(trim($token));
-            if (!$token || !preg_match('/^[a-f0-9]{32}$/', $token)) {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($uid)) {
+            $uid = htmlspecialchars(trim($uid));
+            if (!$uid || !preg_match('/^[a-f0-9]{32}$/', $uid)) {
                 echo self::$twig->render('message.twig', [
-                    'message' => 'Invalid token.'
+                    'message' => 'Invalid UID.'
                 ]);
                 exit;
             } else {
                 // Verify the data file exists
-                $filePath = BASE_PATH . '/data/.' . $token;
+                $filePath = BASE_PATH . '/data/.' . $uid;
                 if (!file_exists($filePath)) {
                     echo self::$twig->render('message.twig', [
-                        'message' => 'File not found.'
+                        'message' => 'Secret not found.'
                     ]);
                     exit;
                 }
@@ -55,13 +55,13 @@ class Retrieve {
             ]);   
         } else {
             echo self::$twig->render('message.twig', [
-                'message' => 'Invalid token.'
+                'message' => 'Invalid UID.'
             ]);
             exit;
         }
     } 
 
-    public static function handlePost($token) {
+    public static function handlePost($uid) {
         self::init();
         if (!hash_equals(self::$sessionCsrfToken, $_POST['csrf_token'])) {
             echo self::$twig->render('message.twig', [
@@ -70,7 +70,7 @@ class Retrieve {
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['totp']) && isset($token)) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['totp']) && isset($uid)) {
             $delete = isset($_POST['delete']);
         
             if (CF_TURNSTILE_ACTIVE && !Challenge::verify($_POST['cf-turnstile-response']))
@@ -82,7 +82,7 @@ class Retrieve {
             }
 
             // Verify the data file exists
-            $filePath = BASE_PATH . '/data/.' . $token;
+            $filePath = BASE_PATH . '/data/.' . $uid;
             if (!file_exists($filePath)) {
                 echo self::$twig->render('message.twig', [
                     'message' => 'File not found.'
@@ -106,7 +106,7 @@ class Retrieve {
                 echo self::$twig->render('deleted.twig');
             } else {        
                 echo self::$twig->render('displaySecret.twig', [
-                    'token' => $token,
+                    'uid' => $uid,
                     'fileContents' => file_get_contents($filePath),
                     'totp' => [
                         'label' => 'Delete',

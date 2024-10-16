@@ -18,26 +18,26 @@ class Created {
         self::$administrator = APP_ADMINISTRATOR_NAME; 
         self::$twig = TwigLoader::getTwig();
     }
-    public static function handleCreated($token) {
+    public static function handleCreated($uid) {
         self::init();
-        $token = htmlspecialchars(trim($token));
-        if (!$token || !preg_match('/^[a-f0-9]{32}$/', $token)) {
+        $uid = htmlspecialchars(trim($uid));
+        if (!$uid || !preg_match('/^[a-f0-9]{13}$/', $uid)) {
             echo self::$twig->render('message.twig', [
-                'message' => 'Invalid token.'
+                'message' => 'Invalid UID.'
             ]);
             exit;
         } else {
             // Verify the data file exists
-            $filePath = BASE_PATH . '/data/.' . $token;
+            $filePath = BASE_PATH . '/data/.' . $uid;
             if (!file_exists($filePath)) {
                 echo self::$twig->render('message.twig', [
-                    'message' => 'File not found.'
+                    'message' => 'Secret not found.'
                 ]);
                 exit;
             }
         }
 
-        self::$retrieveUrl = APP_BASE_URL . '/retrieve/' . $token;
+        self::$retrieveUrl = APP_BASE_URL . '/retrieve/' . $uid;
 
         //Send the email
         if (APP_ENV !== 'dev' || MAILGUN_ACTIVE) {

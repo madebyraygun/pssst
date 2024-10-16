@@ -13,7 +13,7 @@
                 counter.textContent = `${query.value.length}/{{maxLength}}`;
             });
         </script>
-        <input type="hidden" name="token" value="{{token}}">
+        <input type="hidden" name="uid" value="{{uid}}">
         <input type="hidden" name="csrf_token" value="{{csrfToken}}">
         {% if cfTsActive %}
             <div class="cf-turnstile" data-sitekey="{{cfTsSiteKey}}" data-theme="light"></div>

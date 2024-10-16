@@ -10,6 +10,6 @@
   {% endif %}
   <input type="submit" value="{{label}}">
   {% if cfTsActive %}
-    <div class="cf-turnstile" data-sitekey="{{cfTsSiteKey}}" data-theme="light"></div>
+    <div class="cf-turnstile" data-sitekey="{{cfTsSiteKey}}" data-theme="{{defaultColorScheme|default('dark')}}"></div>
   {% endif %}
 </form>

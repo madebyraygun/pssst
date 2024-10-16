@@ -17,7 +17,7 @@
         <input type="hidden" name="csrf_token" value="{{csrfToken}}">
         <input type="submit" value="Submit">
         {% if cfTsActive %}
-            <div class="cf-turnstile" data-sitekey="{{cfTsSiteKey}}" data-theme="light"></div>
+            <div class="cf-turnstile" data-sitekey="{{cfTsSiteKey}}" data-theme="{{defaultColorScheme|default('dark')}}"></div>
         {% endif %}
     </form>
 {% endblock %}

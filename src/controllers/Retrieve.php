@@ -12,7 +12,7 @@ use JiriPudil\OTP\TimeBasedOTP;
 use JiriPudil\OTP\Secret;
 
 class Retrieve {
-    private static $csrfToken;
+    private static $sessionCsrfToken;
     private static $otpType;
     private static $otp;
     private static $secret;
@@ -22,7 +22,7 @@ class Retrieve {
     
 
     public static function init() {
-        self::$csrfToken = $_SESSION['csrf_token'];
+        self::$sessionCsrfToken = $_SESSION['csrf_token'];
         self::$otp = new OTP('madebyraygun/pssst', new TimeBasedOTP());
         self::$secret = Secret::fromBase32($_ENV['TOTP_SECRET']);
         self::$account = new SimpleAccountDescriptor($_ENV['APP_ADMINISTRATOR_EMAIL'], self::$secret);
@@ -50,10 +50,7 @@ class Retrieve {
             }
             echo self::$twig->render('totpRequest.twig', [
                 'totp' => [
-                    'csrfToken' => self::$csrfToken,
                     'label' => 'Submit',
-                    'cfTsSiteKey' => CF_TURNSTILE_SITEKEY,
-                    'cfTsActive' => CF_TURNSTILE_ACTIVE,
                 ]
             ]);   
         } else {
@@ -66,7 +63,7 @@ class Retrieve {
 
     public static function handlePost($token) {
         self::init();
-        if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        if (!hash_equals(self::$sessionCsrfToken, $_POST['csrf_token'])) {
             echo self::$twig->render('message.twig', [
                 'message' => 'Invalid CSRF token.'
             ]);
@@ -99,10 +96,7 @@ class Retrieve {
                 echo self::$twig->render('totpRequest.twig', [
                     'message'   => 'Invalid OTP code',
                     'totp' => [
-                        'csrfToken' => self::$csrfToken,
                         'label' => 'Submit',
-                        'cfTsSiteKey' => CF_TURNSTILE_SITEKEY,
-                        'cfTsActive' => CF_TURNSTILE_ACTIVE,
                      ]
                 ]);   
                 exit;
@@ -115,10 +109,7 @@ class Retrieve {
                     'token' => $token,
                     'fileContents' => file_get_contents($filePath),
                     'totp' => [
-                        'csrfToken' => self::$csrfToken,
                         'label' => 'Delete',
-                        'cfTsSiteKey' => CF_TURNSTILE_SITEKEY,
-                        'cfTsActive' => CF_TURNSTILE_ACTIVE,
                      ]
                 ]);   
             }

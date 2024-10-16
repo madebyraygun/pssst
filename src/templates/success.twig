@@ -3,9 +3,9 @@
 {% block content %}
   <p><strong>Success! Your secret was saved.</p>
   {% if mailgunActive %}
-    <p>The secret will be sent to {{administrator ?? 'administrator'}}.</p>
+    <p>The secret will be sent to {{appAdministrator ?? 'the administrator'}}.</p>
   {% elseif retrieveUrl %}
-    <p>Send the following link to {{administrator ?? 'administrator'}} to retrieve the secret: <a href="{{retrieveUrl}}">{{retrieveUrl}}</a></p>
+    <p>Send the following link to {{appAdministrator ?? 'the administrator'}} to retrieve the secret: <a href="{{retrieveUrl}}">{{retrieveUrl}}</a></p>
   {% endif %}
 
   <p><a role="button" href="/">Go back</a></p>

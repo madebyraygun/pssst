@@ -1,7 +1,7 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-  <p>Use this secure form to send passwords and other sensitive information to {{administrator ?? 'administrator'}}. Any information shared via this form will be stored securely and deleted after viewing.</p>
+  <p>Use this secure form to send passwords and other sensitive information to {{appAdministrator ?? 'the administrator'}}. Any information shared via this form will be stored securely and deleted after viewing.</p>
     <form action="/" method="post">
         <label for="query">Message</label>
         <textarea id="query" name="query" rows="4" cols="50" maxlength="{{maxLength}}"></textarea>

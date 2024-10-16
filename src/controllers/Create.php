@@ -8,23 +8,21 @@ use madebyraygun\pssst\services\Challenge;
 use madebyraygun\pssst\base\TwigLoader;
 
 class Create {
+    private static $sessionCsrfToken;
     private static $basePath;
     private static $maxLength;
-    private static $csrfToken;
-    private static $administrator;
     private static $twig;
 
     public static function init() {
         self::$basePath = BASE_PATH;
         self::$maxLength = 10000;
-        self::$csrfToken = $_SESSION['csrf_token'];
-        self::$administrator = APP_ADMINISTRATOR_NAME;
+        self::$sessionCsrfToken = $_SESSION['csrf_token'];
         self::$twig = TwigLoader::getTwig();
     }
 
     public static function handlePost() {
         self::init();
-        if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        if (!hash_equals(self::$sessionCsrfToken, $_POST['csrf_token'])) {
             echo self::$twig->render('message.twig', [
                 'message' => 'Invalid CSRF token.'
             ]);
@@ -73,9 +71,7 @@ class Create {
         
         echo self::$twig->render('index.twig', [
             'token' => $token,
-            'csrfToken' => self::$csrfToken,
             'maxLength' => self::$maxLength,
-            'administrator' => self::$administrator
         ]);   
     }
 }

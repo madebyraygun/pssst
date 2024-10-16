@@ -15,10 +15,9 @@
         </script>
         <input type="hidden" name="uuid" value="{{uuid}}">
         <input type="hidden" name="csrf_token" value="{{csrfToken}}">
+        <input type="submit" value="Submit">
         {% if cfTsActive %}
             <div class="cf-turnstile" data-sitekey="{{cfTsSiteKey}}" data-theme="light"></div>
         {% endif %}
-        <br>
-        <input type="submit" value="Submit">
     </form>
 {% endblock %}

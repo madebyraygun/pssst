@@ -4,8 +4,9 @@ namespace madebyraygun\pssst\controllers;
 
 require '../vendor/autoload.php';
 
-use madebyraygun\pssst\services\Challenge;
 use madebyraygun\pssst\base\TwigLoader;
+use madebyraygun\pssst\helpers\Uuid;
+use madebyraygun\pssst\services\Challenge;
 use JiriPudil\OTP\Account\SimpleAccountDescriptor;
 use JiriPudil\OTP\OTP;
 use JiriPudil\OTP\TimeBasedOTP;
@@ -29,18 +30,18 @@ class Retrieve {
         self::$twig = TwigLoader::getTwig();
     }
 
-    public static function handleGet($uid) {
+    public static function handleGet($uuid) {
         self::init();
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($uid)) {
-            $uid = htmlspecialchars(trim($uid));
-            if (!$uid || !preg_match('/^[a-f0-9]{32}$/', $uid)) {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($uuid)) {
+            $uuid = htmlspecialchars(trim($uuid));
+            if (!Uuid::validate($uuid)) {
                 echo self::$twig->render('message.twig', [
-                    'message' => 'Invalid UID.'
+                    'message' => 'Invalid ID.'
                 ]);
                 exit;
             } else {
                 // Verify the data file exists
-                $filePath = BASE_PATH . '/data/.' . $uid;
+                $filePath = BASE_PATH . '/data/.' . $uuid;
                 if (!file_exists($filePath)) {
                     echo self::$twig->render('message.twig', [
                         'message' => 'Secret not found.'
@@ -55,13 +56,13 @@ class Retrieve {
             ]);   
         } else {
             echo self::$twig->render('message.twig', [
-                'message' => 'Invalid UID.'
+                'message' => 'Invalid ID.'
             ]);
             exit;
         }
     } 
 
-    public static function handlePost($uid) {
+    public static function handlePost($uuid) {
         self::init();
         if (!hash_equals(self::$sessionCsrfToken, $_POST['csrf_token'])) {
             echo self::$twig->render('message.twig', [
@@ -70,7 +71,7 @@ class Retrieve {
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['totp']) && isset($uid)) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['totp']) && isset($uuid)) {
             $delete = isset($_POST['delete']);
         
             if (CF_TURNSTILE_ACTIVE && !Challenge::verify($_POST['cf-turnstile-response']))
@@ -82,10 +83,10 @@ class Retrieve {
             }
 
             // Verify the data file exists
-            $filePath = BASE_PATH . '/data/.' . $uid;
+            $filePath = BASE_PATH . '/data/.' . $uuid;
             if (!file_exists($filePath)) {
                 echo self::$twig->render('message.twig', [
-                    'message' => 'File not found.'
+                    'message' => 'Invalid ID.'
                 ]);
                 exit;
             } 
@@ -94,7 +95,7 @@ class Retrieve {
             $authenticated = self::$otp->verify(self::$account, $totp);
             if (!$authenticated) {
                 echo self::$twig->render('totpRequest.twig', [
-                    'message'   => 'Invalid OTP code',
+                    'message'   => 'Invalid TOTP code',
                     'totp' => [
                         'label' => 'Submit',
                      ]
@@ -106,7 +107,7 @@ class Retrieve {
                 echo self::$twig->render('deleted.twig');
             } else {        
                 echo self::$twig->render('displaySecret.twig', [
-                    'uid' => $uid,
+                    'uuid' => $uuid,
                     'fileContents' => file_get_contents($filePath),
                     'totp' => [
                         'label' => 'Delete',

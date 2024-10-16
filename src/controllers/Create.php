@@ -4,8 +4,10 @@ namespace madebyraygun\pssst\controllers;
 
 require '../vendor/autoload.php';
 
-use madebyraygun\pssst\services\Challenge;
 use madebyraygun\pssst\base\TwigLoader;
+use madebyraygun\pssst\helpers\Uuid;
+use madebyraygun\pssst\services\Challenge;
+
 
 class Create {
     private static $sessionCsrfToken;
@@ -37,11 +39,11 @@ class Create {
             exit;
         }
 
-        // Validate the uid
-        $uid = $_POST['uid'];
-        if (!preg_match('/^[a-f0-9]{13}$/', $uid)) {
+        // Validate the uuid
+        $uuid = $_POST['uuid'];
+        if (!Uuid::validate($uuid)) {
             echo self::$twig->render('message.twig', [
-                'message' => 'Invalid UID.'
+                'message' => 'Invalid ID.'
             ]);
             exit;
         }
@@ -52,10 +54,10 @@ class Create {
         $query = substr($query, 0, self::$maxLength); 
 
         // Define the file path
-        $filePath = self::$basePath . '/data/.' . $uid;
+        $filePath = self::$basePath . '/data/.' . $uuid;
 
         if (file_put_contents($filePath, $query) !== false) {
-            header("Location: created/" . $uid);
+            header("Location: created/" . $uuid);
             exit;
         } else {
             echo self::$twig->render('message.twig', [
@@ -67,12 +69,12 @@ class Create {
     public static function handleGet() {
         self::init();
         /* use as encrypt key? */
-        // $uid = bin2hex(random_bytes(16));
-        $uid = uniqid();
-        $_SESSION['uid'] = $uid;
+        // $uuid = bin2hex(random_bytes(16));
+        $uuid = Uuid::uuid4();
+        $_SESSION['uuid'] = $uuid;
         
         echo self::$twig->render('index.twig', [
-            'uid' => $uid,
+            'uuid' => $uuid,
             'maxLength' => self::$maxLength,
         ]);   
     }

@@ -39,7 +39,7 @@ ___
 
 ### Extremly important note
 
-The `generate-totp` endpoint is only available when the app is in "dev" mode. It is extremely important that you **only** run the publicly accessible site in "production" mode. Running a publicly accessible site in "dev" mode can expose your TOTP authentication credentials and therefore your secrets to the public. If you make this mistake, be sure to regenerate your `TOTP_SECRET` key and update your authenticator.
+The `generate-totp` endpoint is only available when the app is in "dev" mode. It is extremely important that you **only** run the publicly accessible site in "production" mode. Running a publicly accessible site in "dev" mode can expose your TOTP authentication credentials. If you make this mistake, be sure to regenerate your `TOTP_SECRET` key and update your authenticator.
 ___
 
 Create a new secret using the form at the main URL of your application. The secret contents will be saved as a JSON file in the `data` folder, and the contents of the message will be encrypted wi a "key" that is included in the retrieve URL. The server administrator cannot view the contents of the secret without that key.

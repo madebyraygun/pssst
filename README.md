@@ -1,10 +1,10 @@
 # PSSST!
 
-A lightweight PHP-based to securely submit and retrieve information such as passwords via the web. No database required. Keep your secrets out of email and Slack! 
+A lightweight PHP-based application to securely submit and retrieve information such as passwords via the web. No database required. Keep your secrets out of email and Slack! 
 
 With the TOTP authentication and administrator email features enabled, this app functions as a single-user secret request form. (Meaning, only the administrator can get notified and retrieve secrets). By turning these features off, anyone can use the system to generate a secret, copy the generated link, and send via any secure channel.
 
-**Note** This application is still in development, and, given the presumably sensitive nature of the message contents, should be used with caution. 
+**Note** This application is still in development, and, given the presumably sensitive nature of the message contents, should be used with caution.
 
 ## Installation
 
@@ -17,7 +17,6 @@ From the terminal:
 `cp .env.example .env`
 
 Edit the .env file to update the app settings. Include your Cloudflare Turnstile site key and Mailgun credentials (recommended but optional).
-
 
 ### Optional
 
@@ -54,3 +53,4 @@ The `retrieve` endpoint is protected by the TOTP authentication you set up earli
 * Add automatic time-based expiration of secrets
 * Add "delete after view" for secrets
 * Add translation support
+* Security review

@@ -1,5 +1,12 @@
 {
+    "name": "madebyraygun/pssst",
+    "description": "A lightweight single-user application to securely submit and retrieve information via the web.",
+    "version": "0.1.0",
+    "type": "project",
+    "keywords" : ["password", "security", "privacy", "php", "web", "application"],
+    "license" : "MIT",
     "require": {
+        "php": ">=8.2.0",
         "vlucas/phpdotenv": "^5.6",
         "mailgun/mailgun-php": "^4.3",
         "symfony/http-client": "^7.1",
@@ -14,9 +21,19 @@
             "php-http/discovery": true
         }
     },
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example.dev', '.env');\""
+        ]
+    },
+    "support": {
+        "docs": "https://github.com/madebyraygun/psst/blob/dev/README.md",
+        "issues": "https://github.com/madebyraygun/psst/issues",
+        "source": "https://github.com/madebyraygun/psst"
+    },
     "autoload": {
         "psr-4": {
-        "madebyraygun\\pssst\\": "src"
+            "madebyraygun\\pssst\\": "src"
         }
     }
 }

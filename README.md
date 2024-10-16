@@ -1,6 +1,10 @@
 # PSSST!
 
-A lightweight PHP-based single-user application to securely submit and retrieve information such as passwords via the web. No database required. Keep your secrets out of email and Slack!
+A lightweight PHP-based to securely submit and retrieve information such as passwords via the web. No database required. Keep your secrets out of email and Slack! 
+
+With the TOTP authentication and administrator email features enabled, this app functions as a single-user secret request form. (Meaning, only the administrator can get notified and retrieve secrets). By turning these features off, anyone can use the system to generate a secret, copy the generated link, and send via any secure channel.
+
+**Note** This application is still in development, and, given the presumably sensitive nature of the message contents, should be used with caution. 
 
 ## Installation
 
